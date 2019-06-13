@@ -21,8 +21,14 @@ public class DateUtil {
         LocalDate firstDayOfQuarter = currentDate.with(currentDate.getMonth().firstMonthOfQuarter())
                 .with(TemporalAdjusters.firstDayOfMonth());
 
-        return firstDayOfQuarter.plusMonths(2)
+        LocalDate endOfQuarter = firstDayOfQuarter.plusMonths(2)
                 .with(TemporalAdjusters.lastDayOfMonth());
+
+        while (!isWorkingDay(endOfQuarter)) {
+            endOfQuarter = endOfQuarter.minusDays(1);
+        }
+
+        return endOfQuarter;
     }
 
     private static boolean isWorkingDay(LocalDate date) {

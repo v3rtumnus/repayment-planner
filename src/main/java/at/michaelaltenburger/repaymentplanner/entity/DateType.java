@@ -1,4 +1,4 @@
-package at.michaelaltenburger.repaymentplanner;
+package at.michaelaltenburger.repaymentplanner.entity;
 
 public enum DateType {
     INITIAL_AMOUNT,
