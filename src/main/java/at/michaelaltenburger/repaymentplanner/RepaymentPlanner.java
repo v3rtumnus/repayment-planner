@@ -15,9 +15,9 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class RepaymentPlanner {
 
-    private static final LocalDate START_DATE = LocalDate.of(2019, 1, 1);
-    private static final BigDecimal START_AMOUNT = BigDecimal.valueOf(100_000);
-    private static final BigDecimal INSTALLMENT_AMOUNT = BigDecimal.valueOf(1000);
+    private static final LocalDate START_DATE = LocalDate.of(2019, 5, 1);
+    private static final BigDecimal START_AMOUNT = BigDecimal.valueOf(305_000);
+    private static final BigDecimal INSTALLMENT_AMOUNT = BigDecimal.valueOf(960);
     private static final Double INTEREST_RATE = 1.5;
     private static final BigDecimal PROCESSING_FEE = BigDecimal.valueOf(16.9);
     private static final Map<LocalDate, BigDecimal> ADDITIONAL_PAYMENTS = new TreeMap<>();
@@ -67,6 +67,14 @@ public class RepaymentPlanner {
 
                         currentPlanRow = nextRow;
                     }
+
+                    long daysBetween = DAYS.between(currentPlanRow.getDate(), nextBalanceChanging.x);
+
+                    BigDecimal interestForStep = BigDecimal.valueOf(
+                            currentPlanRow.getNewBalance().doubleValue() * daysBetween / 360.0 * INTEREST_RATE / 100)
+                            .setScale(2, RoundingMode.HALF_UP);
+
+                    interestForQuarter = interestForQuarter.add(interestForStep);
 
                     currentAmount = currentAmount.add(interestForQuarter.add(PROCESSING_FEE));
 
